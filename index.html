@@ -14,7 +14,7 @@
 <script>
 const PHONE='89829272077';
 let products=[],cart={},category='Все';
-async function loadProducts(){try{const r=await fetch('/products.json');if(!r.ok)throw new Error('catalog');products=await r.json();}catch(e){products=[];}const cats=['Все',...new Set(products.map(p=>p.cat))];window.cats=cats;renderFilters();renderProducts();renderCart();}
+async function loadProducts(){try{const r=await fetch('/products.json');if(!r.ok)throw new Error('catalog');const data=await r.json();products=Array.isArray(data)?data:(data.items||[]);}catch(e){products=[];}const cats=['Все',...new Set(products.map(p=>p.cat))];window.cats=cats;renderFilters();renderProducts();renderCart();}
 function renderFilters(){document.getElementById('filters').innerHTML=(window.cats||['Все']).map(c=>`<button class="filter ${category===c?'active':''}" onclick="setCategory('${c.replace(/'/g,"\\'")}')">${c}</button>`).join('')}
 function renderProducts(){const list=products.filter(p=>category==='Все'||p.cat===category);document.getElementById('products').innerHTML=list.map(p=>`<article class="product"><div class="photo">${p.image?`<img src="${p.image}" alt="${p.name}">`:`<span>${p.icon||'🧩'}</span>`}</div><div class="product-body"><h3>${p.name}</h3><p>${p.desc||''}</p><div class="price-row"><span class="price">${p.price_on_request?'Цена по запросу':Number(p.price||0).toLocaleString('ru-RU')+' ₽'}</span><button class="add" onclick="${p.price_on_request?`askPrice('${p.name.replace(/'/g,"\\'")}')`:`add(${p.id})`}">${p.price_on_request?'Уточнить цену':'+ В корзину'}</button></div></div></article>`).join('')}
 function setCategory(c){category=c;renderFilters();renderProducts()}
