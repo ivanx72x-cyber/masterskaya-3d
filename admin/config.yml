@@ -1,0 +1,30 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "uploads"
+public_folder: "/uploads"
+
+locale: "ru"
+
+collections:
+  - name: "catalog"
+    label: "Каталог товаров"
+    files:
+      - name: "products"
+        label: "Товары магазина"
+        file: "products.json"
+        format: "json"
+        fields:
+          - label: "Товары"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "ID", name: "id", widget: "number" }
+              - { label: "Название", name: "name", widget: "string" }
+              - { label: "Категория", name: "cat", widget: "string" }
+              - { label: "Описание", name: "desc", widget: "text", required: false }
+              - { label: "Цена в рублях", name: "price", widget: "number", value_type: "int", required: false }
+              - { label: "Уточнять цену", name: "price_on_request", widget: "boolean", default: false }
+              - { label: "Фото", name: "image", widget: "image", required: false }
+              - { label: "Эмодзи вместо фото", name: "icon", widget: "string", required: false }
